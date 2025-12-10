@@ -10,7 +10,7 @@ public class Server {
 
 
     public Server() {
-        Map<String, Object> configs =  ConfigManager.getInstance().getConfigurations("Server");
+        Map<String, Object> configs =  ProperitiesConfigManager.getInstance().getConfigurations("Server");
         this.host = (String) configs.getOrDefault("server.host", "localhost");
         this.port = Integer.parseInt((String) configs.getOrDefault("server.port", "8080"));
     }
