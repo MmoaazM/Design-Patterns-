@@ -8,44 +8,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class ConfigManager {
-    private static ConfigManager Manager; /// lazy singleton pattern
+public abstract class ConfigManager {
+    private IfileConfiguration config;
 
-    private static final String CONFIG_FOLDER_PATH = Paths.get("src", "sciencetech", "season25", "designpatterns", "p1", "task1", "config").toFile().getAbsolutePath();
     private final Map<String, Map<String, Object>> configurations;
 
-    private ConfigManager() {
+    protected ConfigManager(IfileConfiguration config) {
+        this.config=config;
         configurations = new HashMap<>();
     }
 
-    public static ConfigManager getInstance() {
-        if (Manager == null) {
-            synchronized (ConfigManager.class) {
-                if (Manager == null)
-                    Manager = new ConfigManager();
-            }
-        }
-        return Manager;
-    }
-
     public Map<String, Object> getConfigurations(String className) {
-        File file = new File(new StringBuilder(CONFIG_FOLDER_PATH)
-                .append(File.separator)
-                .append(className)
-                .append(".properties")
-                .toString());
 
-        try (FileReader reader = new FileReader(file)) {
-            Properties properties = new Properties();
-            properties.load(reader);
-            Map<String, Object> propertiesMap = new HashMap<>();
-            for (String key : properties.stringPropertyNames())
-                propertiesMap.put(key, properties.getProperty(key));
+        Map<String, Object> FileConfiguration = new HashMap<>();
 
-            configurations.put(className, propertiesMap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileConfiguration= config.getConfigurationsFromFile(config.CreatePath(className));
+
+        configurations.put(className, FileConfiguration);
+
         return configurations.getOrDefault(className, new HashMap<>());
     }
 }
