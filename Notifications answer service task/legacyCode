@@ -1,0 +1,31 @@
+
+public class LegacyCode {
+    public class AnswerService {
+        public void processAnswer(String answerText, User author, User questionAsker, String portalType) {
+            // 1. Validation Logic
+            if (portalType.equals("Kids") && answerText.contains("slang")) {
+                System.out.println("Blocked: Kids mode detects slang.");
+                return;
+            }
+            if (answerText.contains("bad_word")) {
+                System.out.println("Blocked: Profanity detected.");
+                return;
+            }
+
+            // 2. Save Logic
+            System.out.println("[DB] Answer saved: " + answerText);
+
+            // 3. Notifications Logic
+            if (questionAsker.isPro()) {
+                System.out.println("[Email] Sending HTML Format to: " + questionAsker.getEmail());
+            } else {
+                System.out.println("[Email] Sending Text Format to: " + questionAsker.getEmail());
+            }
+
+            if (questionAsker.hasMobileApp()) {
+                System.out.println("[Push] To Device ID: " + questionAsker.getDeviceId());
+            }
+        }
+    }
+
+}
